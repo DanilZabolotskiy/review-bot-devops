@@ -1,0 +1,31 @@
+version: "3.2"
+services:
+  postgres-review-bot-dev:
+    build:
+      context: ../../../
+      dockerfile: ./postgres/Dockerfile
+    container_name: postgres-review-bot-dev
+    environment:
+      POSTGRES_DB: review_bot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    expose:
+      - "5439"
+    ports:
+      - "5439:5439"
+    command: -p 5439
+
+  review-bot-dev:
+    build:
+      context: ../../../
+      dockerfile: ./projects/back/dev/Dockerfile
+    container_name: review-bot-dev
+    ports:
+      - "5560:5560"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-review-bot-dev:5439/review_bot
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SERVER_PORT: 5560
+    depends_on:
+      - postgres-review-bot-dev
