@@ -1,31 +1,31 @@
 version: "3.2"
 services:
-  postgres-social-dev:
+  postgres-review-bot-dev:
     build:
       context: ../../../
       dockerfile: ./postgres/Dockerfile
-    container_name: postgres-social-dev
+    container_name: postgres-review-bot-dev
     environment:
-      POSTGRES_DB: dev_social
+      POSTGRES_DB: review_bot
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
+      POSTGRES_PASSWORD: postgres
     expose:
-      - "5440"
+      - "5439"
     ports:
-      - "5440:5440"
-    command: -p 5440
+      - "5439:5439"
+    command: -p 5439
 
-  social-dev:
+  review-bot-dev:
     build:
       context: ../../../
       dockerfile: ./projects/back/dev/Dockerfile
-    container_name: social-dev
+    container_name: review-bot-dev
     ports:
-      - "5561:5561"
+      - "5560:5560"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-social-dev:5434/dev_social?characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-review-bot-dev:5439/review_bot
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: root
-      SERVER_PORT: 5561
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SERVER_PORT: 5560
     depends_on:
-      - postgres-social-dev
+      - postgres-review-bot-dev
